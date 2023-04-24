@@ -1,0 +1,68 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/indicators/selected-planet.png" type="Texture" id=1]
+[ext_resource path="res://assets/fonts/Gudea-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/indicators/unselected-planet.png" type="Texture" id=3]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "selected",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "unselected",
+"speed": 5.0
+} ]
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 8.0
+
+[sub_resource type="DynamicFont" id=3]
+size = 30
+font_data = ExtResource( 2 )
+
+[node name="Moon" type="Area2D"]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+scale = Vector2( 0.016, 0.016 )
+frames = SubResource( 1 )
+animation = "selected"
+__meta__ = {
+"_editor_description_": "transform sizes
+0.06 asteroid 
+0.08 moon
+0.1   small planet
+0.3   Large planet 
+
+"
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
+
+[node name="Timer" type="Timer" parent="."]
+process_mode = 0
+autostart = true
+__meta__ = {
+"_editor_description_": "timer runs ship production on this planet"
+}
+
+[node name="ShipCountLabel" type="Label" parent="."]
+margin_left = 10.0
+margin_top = -19.0
+margin_right = 48.0
+margin_bottom = 19.0
+custom_fonts/font = SubResource( 3 )
+text = "##"
+__meta__ = {
+"_editor_description_": "font  sizes
+0.06 asteroid 
+0.08 moon
+30   small planet
+70   Large planet 
+
+"
+}
