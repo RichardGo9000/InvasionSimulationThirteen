@@ -33,6 +33,9 @@ func _on_Planet_input_event(viewport, event, shape_idx):
 			lvl.source = -1
 		elif source_defined() && !destination_defined():
 			lvl.destination = id
+			print("sending ",lvl.planets[lvl.source].shipCount," ships")
+			lvl.send_fleet()
+			#lvl.planets[lvl.source].shipCount = 0
 			#create and send the fleet
 
 
