@@ -22,7 +22,7 @@ func send_fleet():
 	
 	print("ship count: ",planets[source].shipCount)
 	#planets[2].ShipCountLabel.text = "606"
-	#planets[2].ShipCountLabel.text = str(planets[source].shipCount)
+	planets[source].ShipCountLabel.text = str(planets[source].shipCount)
 	print("Sending fleet")
 
 
