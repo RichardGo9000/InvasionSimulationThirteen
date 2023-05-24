@@ -15,7 +15,6 @@ func _ready():
 	spawn_planet()
 
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
@@ -72,3 +71,17 @@ func _destination_selected():
 		return true
 	else:
 		return false
+
+
+func fleet_orders(planet_id):
+	if !_source_selected():
+		source = planet_id
+	elif _source_reselected(planet_id):
+		source = -1
+	elif _source_selected():
+		destination = planet_id
+		launch_fleet()
+
+
+func launch_fleet():
+	print("launching fleet from",source," to ",destination)
