@@ -3,7 +3,9 @@ extends Node2D
 var planets = []
 var PLANET = load("res://planetary_bodies/planet.tscn")
 var clicked = false
-var planet_id
+#var planet_id
+var source := -1
+var destination := -1
 
 
 # Called when the node enters the scene tree for the first time.
@@ -42,9 +44,31 @@ func spawn_planet(team := 0):
 	planets[i].planet_clicked.connect(Callable(planet_click_handler))
 
 func planet_click_handler(planet_id):
+	clicked = true
 	print("planet ",planet_id," clicked and received")
+
 
 #Double click protection
 func _on_click_timer_timeout():
 	clicked = false
+	
 
+func _source_selected():
+	if source != -1:
+		return true
+	else:
+		return false
+
+
+func _source_reselected(planet_id):
+	if source == planet_id:
+		return true
+	else:
+		return false
+
+
+func _destination_selected():
+	if destination != -1:
+		return true
+	else:
+		return false
