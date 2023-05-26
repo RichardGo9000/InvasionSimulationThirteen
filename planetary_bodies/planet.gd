@@ -6,6 +6,7 @@ var team := 0
 
 signal planet_clicked(id)
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -43,3 +44,4 @@ func _on_input_event(viewport, event, shape_idx):
 	if Input.is_action_just_pressed("click"):
 		print("clicked planet ",planet_id)
 		emit_signal("planet_clicked", planet_id)
+
