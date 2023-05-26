@@ -86,8 +86,6 @@ func _set_fleet_orders(planet_id):
 		destination = planet_id
 		print("destination: ",destination)
 		launch_fleet()
-		_reset_source()
-		_reset_destination()
 
 
 func _reset_source():
@@ -102,6 +100,13 @@ func get_fleet_size(planet_id):
 	return planets[planet_id].ship_count
 	
 	
+func remove_ships_from_stardock(planet_id, departing_ship_count):
+	planets[planet_id].ship_count -= departing_ship_count
+	
+	
 func launch_fleet():
 	var ships_in_fleet = get_fleet_size(source)
+	remove_ships_from_stardock(source, ships_in_fleet)
 	print("launching fleet from ",source," to ",destination," with ",ships_in_fleet," ships.")
+	_reset_source()
+	_reset_destination()
