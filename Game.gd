@@ -42,9 +42,11 @@ func spawn_planet(team := 0):
 #	planets[i].connect("planet_clicked", self, "planet_click_handler", "planet_id")
 	planets[i].planet_clicked.connect(Callable(planet_click_handler))
 
+
 func planet_click_handler(planet_id):
 	clicked = true
 	print("planet ",planet_id," clicked and received")
+	_set_fleet_orders(planet_id)
 
 
 #Double click protection
@@ -73,15 +75,33 @@ func _destination_selected():
 		return false
 
 
-func fleet_orders(planet_id):
+func _set_fleet_orders(planet_id):
 	if !_source_selected():
 		source = planet_id
+		print("source: ",source)
 	elif _source_reselected(planet_id):
-		source = -1
+		_reset_source()
+		print("source: ",source)
 	elif _source_selected():
 		destination = planet_id
+		print("destination: ",destination)
 		launch_fleet()
+		_reset_source()
+		_reset_destination()
 
 
+func _reset_source():
+	source = -1
+
+
+func _reset_destination():
+	destination = -1
+
+
+func get_fleet_size(planet_id):
+	return planets[planet_id].ship_count
+	
+	
 func launch_fleet():
-	print("launching fleet from",source," to ",destination)
+	var ships_in_fleet = get_fleet_size(source)
+	print("launching fleet from ",source," to ",destination," with ",ships_in_fleet," ships.")
