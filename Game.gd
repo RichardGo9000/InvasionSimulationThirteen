@@ -21,8 +21,8 @@ func _physics_process(delta):
 	if len(fleets) > 0:
 		#fleets[0].position.y += 10
 		for n in fleets:
-			n.position.x += 10
-			n.position.y += 10
+			n.position.x += 3.1622776602
+			n.position.y += 3.1622776602
 
 
 func random_x():
@@ -39,8 +39,16 @@ func spawn_fleet(current_team := -1):
 	fleets[i].position.x = planets[source].position.x - 60
 	fleets[i].position.y = planets[source].position.y
 	fleets[i].set_team(current_team)
-	#fleets[i].rotation = 0
 	add_child(fleets[i])
+	
+func _chart_course(fleet_id):
+	# A^2 + B^2 = C^2
+	pass
+	
+func _calculate_distance(fleet_id):
+	#compare source planet location to destination planet location
+	#fleets will fly behind non target planets
+	pass
 
 	#EXAMPLE#
 #	var direction = mob_spawn_location.rotation + PI / 2
