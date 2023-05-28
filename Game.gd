@@ -17,8 +17,12 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func _physics_process(delta):
+	if len(fleets) > 0:
+		#fleets[0].position.y += 10
+		for n in fleets:
+			n.position.x += 10
+			n.position.y += 10
 
 
 func random_x():
@@ -37,6 +41,7 @@ func spawn_fleet(current_team := -1):
 	fleets[i].set_team(current_team)
 	#fleets[i].rotation = 0
 	add_child(fleets[i])
+
 	#EXAMPLE#
 #	var direction = mob_spawn_location.rotation + PI / 2
 #	direction += randf_range(-PI / 4, PI / 4)
