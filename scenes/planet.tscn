@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://c6qoa88v4ip8f"]
+
+[ext_resource type="Texture2D" uid="uid://cibthmdh2m5yv" path="res://assets/img/btnPlanet.png" id="1_jmt53"]
+[ext_resource type="Script" path="res://scripts/planet.gd" id="1_uix48"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0uqxd"]
+radius = 25.0
+
+[node name="Planet" type="Node2D"]
+script = ExtResource("1_uix48")
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="."]
+texture_filter = 1
+position = Vector2(-11.6667, -11.6667)
+scale = Vector2(0.466667, 0.466667)
+texture_normal = ExtResource("1_jmt53")
+shape = SubResource("CircleShape2D_0uqxd")
+
+[connection signal="pressed" from="TouchScreenButton" to="." method="_on_touch_screen_button_pressed"]

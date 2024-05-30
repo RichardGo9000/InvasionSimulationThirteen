@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cexk5tb3eoxcb"]
+
+[ext_resource type="Script" path="res://scripts/map.gd" id="1_be84f"]
+
+[node name="Map" type="Node2D"]
+script = ExtResource("1_be84f")
+
+[node name="Flightplans" type="Node2D" parent="."]
