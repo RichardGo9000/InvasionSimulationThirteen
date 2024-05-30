@@ -10,7 +10,8 @@ var planet_counter: int = 0
 var rng = RandomNumberGenerator.new()
 
 func _ready():
-	print("running map.gd")
+	print("screen dims",get_viewport().get_visible_rect().size)
+	#print("running map.gd")
 	#_generate_planet(Vector2(500,500))
 	#_generate_planet(Vector2(100,100))
 	_generate_sector(2)
