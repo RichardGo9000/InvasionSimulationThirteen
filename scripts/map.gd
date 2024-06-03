@@ -130,7 +130,7 @@ func _generate_fleet(fleet_ship_count):
 	curve.add_point(Global.source)
 	curve.add_point(Global.destination)
 	#_clear_src_dst()
-	path.curve = curve
+	path.curve = curve  # TODO delete path along with all childrem when finished with travewl
 	path.add_child(follow)
 	follow.add_child(new_fleet)
 	new_fleet.ship_count = planets[Global.source_id].ship_count
