@@ -8,3 +8,6 @@ var fleet_array: Array = []
 var planet_array: Array = []
 
 var source_id: int = -1
+var dst_id: int = -1
+
+var fleet_counter: int = 0

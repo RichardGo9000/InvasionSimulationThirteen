@@ -109,6 +109,11 @@ func launch_fleet():
 	# on long press present prompt of how many ships to send
 	# on second click clear origin
 	_generate_fleet(1)
+	
+func receive_fleet():
+	# Fleet has arrived, add shipos to planet count and remove fleet pathfollow and path2d from scene
+	
+	pass
 
 func _clear_src_dst():
 	Global.source = Global.null_vector
@@ -120,6 +125,7 @@ func _generate_fleet(fleet_ship_count):
 	var curve: Curve2D       = Curve2D.new()
 	var follow: PathFollow2D = PathFollow2D.new()
 	var new_fleet = fleet.instantiate()
+	new_fleet.dst_id = Global.dst_id
 	curve.clear_points()
 	curve.add_point(Global.source)
 	curve.add_point(Global.destination)
@@ -128,6 +134,8 @@ func _generate_fleet(fleet_ship_count):
 	path.add_child(follow)
 	follow.add_child(new_fleet)
 	new_fleet.ship_count = planets[Global.source_id].ship_count
+	new_fleet.connect("fleet_arrived", receive_fleet)
+#planets[n].connect("planet_selected", launch_fleet)
 	planets[Global.source_id].ship_count = 0
 	_clear_src_dst()
 	print("ships in fleet",new_fleet.ship_count)

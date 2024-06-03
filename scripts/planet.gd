@@ -19,6 +19,7 @@ func _on_touch_screen_button_pressed():
 		Global.source_id = self.id
 	elif Global.destination == Global.null_vector:
 		Global.destination = self.global_position
+		Global.dst_id = self.id
 		print("Ready to launch fleet(from planet.tscn)")
 		emit_signal("planet_selected")
 
