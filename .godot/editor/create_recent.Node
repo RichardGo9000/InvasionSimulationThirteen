@@ -1,3 +1,5 @@
+Timer
+Label
 CollisionShape2D
 Sprite2D
 StaticBody2D

@@ -2,18 +2,39 @@ extends Node2D
 
 signal planet_selected
 
-var id = ""
+@onready var count_label = $Label
+var ship_count: int = 0
+
+var id: int
 
 func _ready():
-	print("planet ready")
+	pass
+	#print("planet ready")
 
 func _on_touch_screen_button_pressed():
 	print("touch detected") # Replace with function body.
 	if Global.source == Global.null_vector:
 		print("setting Global.source to ", self.global_position)
 		Global.source = self.global_position
+		Global.source_id = self.id
 	elif Global.destination == Global.null_vector:
 		Global.destination = self.global_position
 		print("Ready to launch fleet(from planet.tscn)")
 		emit_signal("planet_selected")
 
+
+
+func _on_timer_timeout():
+	ship_count += 1
+	count_label.text = str(ship_count)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

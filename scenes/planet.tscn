@@ -4,16 +4,36 @@
 [ext_resource type="Script" path="res://scripts/planet.gd" id="1_uix48"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0uqxd"]
-radius = 25.0
+radius = 26.53
 
 [node name="Planet" type="Node2D"]
 script = ExtResource("1_uix48")
 
 [node name="TouchScreenButton" type="TouchScreenButton" parent="."]
 texture_filter = 1
-position = Vector2(-11.6667, -11.6667)
-scale = Vector2(0.466667, 0.466667)
+position = Vector2(-34, -31)
+scale = Vector2(1.36, 1.24)
 texture_normal = ExtResource("1_jmt53")
 shape = SubResource("CircleShape2D_0uqxd")
 
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
 [connection signal="pressed" from="TouchScreenButton" to="." method="_on_touch_screen_button_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

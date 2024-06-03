@@ -7,4 +7,4 @@ var destination: Vector2 = null_vector
 var fleet_array: Array = []
 var planet_array: Array = []
 
-var source_id = ""
+var source_id: int = -1

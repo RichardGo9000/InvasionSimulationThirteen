@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="IS13_3"
+config/name="InvasionSimulation13"
 run/main_scene="res://scenes/map.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"

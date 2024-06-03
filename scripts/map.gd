@@ -3,6 +3,9 @@ extends Node2D
 @onready var planet = preload("res://scenes/planet.tscn")
 @onready var fleet = preload("res://scenes/fleet.tscn")
 @onready var flightplans = $Flightplans
+@onready var screen_dims: Vector2
+var x_limit
+var y_limit
 
 var planets: Array = []
 var planet_counter: int = 0
@@ -11,37 +14,106 @@ var rng = RandomNumberGenerator.new()
 
 func _ready():
 	print("screen dims",get_viewport().get_visible_rect().size)
+	screen_dims = get_viewport().get_visible_rect().size
+	x_limit = screen_dims.x
+	y_limit = screen_dims.y
 	#print("running map.gd")
 	#_generate_planet(Vector2(500,500))
 	#_generate_planet(Vector2(100,100))
-	_generate_sector(2)
+	_generate_sector(4)
 
 func _generate_planet(grid_pos: Vector2) -> void:
 	var n: int = planet_counter
 	planets.append(planet.instantiate())
-	planets[n].id = "p" + str(n)
+	planets[n].id = str(n)
+	print("spawning planet ", planets[n].id)
 	planets[n].global_position = grid_pos
+	planets[n].name = "Planet" + str(n)
 	flightplans.get_parent().add_child(planets[n])
 	planets[n].connect("planet_selected", launch_fleet)
 	planet_counter += 1
 
+## _check_overlap() checks if any planet is colliding with another on spawn
+#func _overlaping(grid_pos: Vector2, radius: int) -> bool:
+func _overlaping(grid_pos: Vector2) -> bool:
+	var border = 120
+	if planets.size() >= 1:
+		for planet in planets:
+			if abs(grid_pos.x - planet.global_position.x) < border:
+				if abs(grid_pos.y - planet.global_position.y) < border:
+					return true
+	return false
+
+func _select_quadrant(quadrant: int) -> Vector2:
+	var screen_width: int = screen_dims.x
+	var screen_height: int = screen_dims.y
+	var half_width: int = screen_width / 2
+	var half_height: int = screen_height / 2
+	
+	var border_margin = 50
+	
+	var x_floor = 0 + border_margin
+	var x_roof = screen_width - border_margin
+	var y_floor = 0 + border_margin
+	var y_roof = screen_height - border_margin
+	
+	var solution_coordinates: Vector2 = Vector2.ZERO
+	
+	match quadrant:
+		1:
+			# Top Right
+			x_floor = half_width
+			# x_roof defined above
+			# y_floor defined above
+			y_roof = half_height
+		2:
+			# Top Left
+			# x_floor defined above
+			x_roof = half_width
+			# y_floor defined above
+			y_roof = half_height
+		3:
+			# Bottom Left
+			# x_floor defined above
+			x_roof = half_width
+			y_floor = half_height
+			# y_roof defined above
+		4:
+			# Bottom Right
+			x_floor = half_width
+			# x_roof defined above
+			y_floor = half_height
+			# y_roof defined above
+	# get random coordinates within defined bounds
+	var x: int = randi_range(x_floor, x_roof)
+	var y: int = randi_range(y_floor, y_roof)
+	solution_coordinates = Vector2(x, y)
+	return solution_coordinates
+
 func _generate_sector(total_planets):
+	#_generate_planet(_select_quadrant(2))
+	#_generate_planet(_select_quadrant(4))
+	#_generate_planet(_select_quadrant(4))
 	var c: int = 0
 	while c < total_planets:
-		var x: int = randi_range(50, 950)
-		var y: int = randi_range(50, 950)
-		var grid_pos = Vector2(x,y)
-		_generate_planet(grid_pos)
+		var grid_pos = _select_quadrant(0)
+		if !_overlaping(grid_pos):
+			_generate_planet(grid_pos)
+		# TODO loop over several times to try to find a location but limit max iterations to 10 or something
 		c += 1
 	
 
 
 func launch_fleet():
+	# on click send all ships
+	# on long press present prompt of how many ships to send
+	# on second click clear origin
 	_generate_fleet(1)
 
 func _clear_src_dst():
 	Global.source = Global.null_vector
 	Global.destination = Global.null_vector
+	Global.source_id = -1
 
 func _generate_fleet(fleet_ship_count):
 	var path: Path2D         = Path2D.new()
@@ -51,10 +123,16 @@ func _generate_fleet(fleet_ship_count):
 	curve.clear_points()
 	curve.add_point(Global.source)
 	curve.add_point(Global.destination)
-	_clear_src_dst()
+	#_clear_src_dst()
 	path.curve = curve
 	path.add_child(follow)
 	follow.add_child(new_fleet)
+	new_fleet.ship_count = planets[Global.source_id].ship_count
+	planets[Global.source_id].ship_count = 0
+	_clear_src_dst()
+	print("ships in fleet",new_fleet.ship_count)
+	
+	
 	follow.loop = false
 	flightplans.add_child(path)
 
