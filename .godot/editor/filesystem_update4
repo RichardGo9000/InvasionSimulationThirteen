@@ -2,6 +2,3 @@ res://scripts/map.gd
 res://scenes/map.tscn
 res://scenes/planet.tscn
 res://scenes/fleet.tscn
-res://scripts/fleet.gd
-res://scripts/global.gd
-res://scripts/planet.gd

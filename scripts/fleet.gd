@@ -4,7 +4,7 @@ signal fleet_arrived
 
 var ship_count: int = 0
 var dst_id
-var fleet_id
+var path_name
 
 func _ready():
 	pass #print("fleet underway (from fleet.tscn)")

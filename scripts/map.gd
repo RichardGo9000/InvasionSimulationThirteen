@@ -10,6 +10,8 @@ var y_limit
 var planets: Array = []
 var planet_counter: int = 0
 
+var fleet_counter: int = 0
+
 var rng = RandomNumberGenerator.new()
 
 func _ready():
@@ -110,9 +112,9 @@ func launch_fleet():
 	# on second click clear origin
 	_generate_fleet(1)
 	
-func receive_fleet():
+func receive_fleet(path_name):#path_name: String):
 	# Fleet has arrived, add shipos to planet count and remove fleet pathfollow and path2d from scene
-	
+	print("path_name", path_name)
 	pass
 
 func _clear_src_dst():
@@ -121,6 +123,7 @@ func _clear_src_dst():
 	Global.source_id = -1
 
 func _generate_fleet(fleet_ship_count):
+	fleet_counter += 1
 	var path: Path2D         = Path2D.new()
 	var curve: Curve2D       = Curve2D.new()
 	var follow: PathFollow2D = PathFollow2D.new()
@@ -130,11 +133,16 @@ func _generate_fleet(fleet_ship_count):
 	curve.add_point(Global.source)
 	curve.add_point(Global.destination)
 	#_clear_src_dst()
-	path.curve = curve  # TODO delete path along with all childrem when finished with travewl
+	path.curve = curve  # TODO delete path along with all childrem when finished with travel
+	var path_name = "path" + str(fleet_counter)
+	path.name = path_name
 	path.add_child(follow)
 	follow.add_child(new_fleet)
 	new_fleet.ship_count = planets[Global.source_id].ship_count
-	new_fleet.connect("fleet_arrived", receive_fleet)
+	#new_fleet.connect("fleet_arrived", receive_fleet)
+	#new_fleet.connect("fleet_arrived", receive_fleet, path_name)
+	new_fleet.path_name = path_name
+	new_fleet.dst_id = Global.dst_id
 #planets[n].connect("planet_selected", launch_fleet)
 	planets[Global.source_id].ship_count = 0
 	_clear_src_dst()
@@ -151,6 +159,13 @@ func _physics_process(delta):
 		#it is likely that the error may be a few pixels per second in a random fleets progress
 		flightplans.get_child(i).get_child(0).progress += 500 * delta
 		if flightplans.get_child(i).get_child(0).progress_ratio >= 0.98:
+			print("fleet size ", flightplans.get_child(i).get_child(0).get_node("Fleet").ship_count)
+			var dst = flightplans.get_child(i).get_child(0).get_node("Fleet").dst_id
+			print("destination ", dst)
+			planets[dst].ship_count += flightplans.get_child(i).get_child(0).get_node("Fleet").ship_count
 			print("destination reached")
+			# perhaps I can skip the signal from the fleet and just add ship count to dst then delete here
+			print(flightplans.get_children())
 			flightplans.remove_child(flightplans.get_child(i))
+			print(flightplans.get_children())
 		i += 1
