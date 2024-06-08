@@ -129,30 +129,27 @@ func _generate_fleet(fleet_ship_count):
 	var follow: PathFollow2D = PathFollow2D.new()
 	var new_fleet = fleet.instantiate()
 	new_fleet.dst_id = Global.dst_id
+	new_fleet.src_id = Global.src_id
 	curve.clear_points()
 	curve.add_point(Global.source)
 	curve.add_point(Global.destination)
-	#_clear_src_dst()
-	path.curve = curve  # TODO delete path along with all childrem when finished with travel
+	path.curve = curve
 	var path_name = "path" + str(fleet_counter)
 	path.name = path_name
 	path.add_child(follow)
 	follow.add_child(new_fleet)
 	new_fleet.ship_count = planets[Global.source_id].ship_count
-	#new_fleet.connect("fleet_arrived", receive_fleet)
-	#new_fleet.connect("fleet_arrived", receive_fleet, path_name)
 	new_fleet.path_name = path_name
 	new_fleet.dst_id = Global.dst_id
-#planets[n].connect("planet_selected", launch_fleet)
 	planets[Global.source_id].ship_count = 0
 	_clear_src_dst()
-	print("ships in fleet",new_fleet.ship_count)
-	
-	
 	follow.loop = false
 	flightplans.add_child(path)
 
 func _physics_process(delta):
+	_move_fleets(delta)
+
+func _move_fleets(delta):
 	var i: int = 0
 	while i < flightplans.get_child_count():  
 		#this way of accessing fligghtplans may cause an error with many concurrent flights
@@ -161,10 +158,14 @@ func _physics_process(delta):
 		if flightplans.get_child(i).get_child(0).progress_ratio >= 0.98:
 			print("fleet size ", flightplans.get_child(i).get_child(0).get_node("Fleet").ship_count)
 			var dst = flightplans.get_child(i).get_child(0).get_node("Fleet").dst_id
-			print("destination ", dst)
+			var src = flightplans.get_child(i).get_child(0).get_node("Fleet").src_id
+			print("src ", src)
+			print("planet children ", planets[dst].get_children())
+			planets[dst].get_child(3).play("unselected") # TODO have a timer keep these selected for a sec
+			planets[src].get_child(3).play("unselected")
 			planets[dst].ship_count += flightplans.get_child(i).get_child(0).get_node("Fleet").ship_count
 			print("destination reached")
-			# perhaps I can skip the signal from the fleet and just add ship count to dst then delete here
+			# skip the signal from the fleet and just add ship count to dst then delete here
 			print(flightplans.get_children())
 			flightplans.remove_child(flightplans.get_child(i))
 			print(flightplans.get_children())

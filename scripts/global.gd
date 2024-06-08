@@ -9,5 +9,6 @@ var planet_array: Array = []
 
 var source_id: int = -1
 var dst_id: int = -1
+var src_id: int = -1
 
 var fleet_counter: int = 0
