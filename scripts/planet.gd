@@ -5,7 +5,7 @@ signal planet_selected
 @onready var count_label = $Label
 @onready var animation = $AnimatedSprite2D
 var ship_count: int = 0
-
+var team: String = ""
 var id: int
 
 func _ready():
@@ -19,6 +19,7 @@ func _on_touch_screen_button_pressed():
 		Global.source = self.global_position
 		Global.source_id = self.id
 		Global.src_id = self.id
+		Global.current_team = team
 		$AnimatedSprite2D.play("selected")
 	elif Global.destination == Global.null_vector:
 		$AnimatedSprite2D.play("selected")

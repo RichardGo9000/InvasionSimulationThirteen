@@ -22,18 +22,20 @@ func _ready():
 	#print("running map.gd")
 	#_generate_planet(Vector2(500,500))
 	#_generate_planet(Vector2(100,100))
-	_generate_sector(4)
+	_generate_sector(1000)
 
 func _generate_planet(grid_pos: Vector2) -> void:
 	var n: int = planet_counter
 	planets.append(planet.instantiate())
 	planets[n].id = str(n)
+	#planets[n].team = "grey"
 	print("spawning planet ", planets[n].id)
 	planets[n].global_position = grid_pos
 	planets[n].name = "Planet" + str(n)
 	flightplans.get_parent().add_child(planets[n])
 	planets[n].connect("planet_selected", launch_fleet)
 	planet_counter += 1
+
 
 ## _check_overlap() checks if any planet is colliding with another on spawn
 #func _overlaping(grid_pos: Vector2, radius: int) -> bool:
@@ -96,9 +98,16 @@ func _generate_sector(total_planets):
 	#_generate_planet(_select_quadrant(2))
 	#_generate_planet(_select_quadrant(4))
 	#_generate_planet(_select_quadrant(4))
+	var quadrant: int = 0
 	var c: int = 0
+	var max_tries = 100
 	while c < total_planets:
-		var grid_pos = _select_quadrant(0)
+		var try = 0
+		
+		var grid_pos = _select_quadrant(quadrant)
+		while _overlaping(grid_pos) and try < max_tries:
+			grid_pos = _select_quadrant(quadrant)
+			try += 1
 		if !_overlaping(grid_pos):
 			_generate_planet(grid_pos)
 		# TODO loop over several times to try to find a location but limit max iterations to 10 or something
@@ -112,15 +121,12 @@ func launch_fleet():
 	# on second click clear origin
 	_generate_fleet(1)
 	
-func receive_fleet(path_name):#path_name: String):
-	# Fleet has arrived, add shipos to planet count and remove fleet pathfollow and path2d from scene
-	print("path_name", path_name)
-	pass
 
 func _clear_src_dst():
 	Global.source = Global.null_vector
 	Global.destination = Global.null_vector
 	Global.source_id = -1
+	Global.current_team = ""
 
 func _generate_fleet(fleet_ship_count):
 	fleet_counter += 1
@@ -130,6 +136,7 @@ func _generate_fleet(fleet_ship_count):
 	var new_fleet = fleet.instantiate()
 	new_fleet.dst_id = Global.dst_id
 	new_fleet.src_id = Global.src_id
+	new_fleet.team = Global.current_team
 	curve.clear_points()
 	curve.add_point(Global.source)
 	curve.add_point(Global.destination)

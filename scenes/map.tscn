@@ -1,8 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://cexk5tb3eoxcb"]
+[gd_scene load_steps=4 format=3 uid="uid://cexk5tb3eoxcb"]
 
 [ext_resource type="Script" path="res://scripts/map.gd" id="1_be84f"]
+[ext_resource type="Texture2D" uid="uid://ck2bps80omidr" path="res://assets/img/StarBackground.png" id="2_o1uwj"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yn1ij"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_o1uwj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Map" type="Node2D"]
 script = ExtResource("1_be84f")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(576, 324)
+sprite_frames = SubResource("SpriteFrames_yn1ij")
 
 [node name="Flightplans" type="Node2D" parent="."]

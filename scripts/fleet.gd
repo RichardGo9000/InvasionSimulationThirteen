@@ -6,6 +6,7 @@ var ship_count: int = 0
 var src_id
 var dst_id
 var path_name
+var team: String = ""
 
 func _ready():
 	pass #print("fleet underway (from fleet.tscn)")

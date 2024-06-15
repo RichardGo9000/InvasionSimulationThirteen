@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://c6qoa88v4ip8f"]
 
-[ext_resource type="Texture2D" uid="uid://cibthmdh2m5yv" path="res://assets/img/btnPlanet.png" id="1_jmt53"]
 [ext_resource type="Script" path="res://scripts/planet.gd" id="1_uix48"]
-[ext_resource type="Texture2D" uid="uid://cwym1turd11sm" path="res://assets/img/btnPlanetBlue.png" id="3_yvs8e"]
+[ext_resource type="Texture2D" uid="uid://ddamq0gwtcytn" path="res://assets/img/btnPlanetBlueSelected.png" id="2_w2kcn"]
+[ext_resource type="Texture2D" uid="uid://bn1vsa3kggtjh" path="res://assets/img/btnPlanetBlueUnselected.png" id="3_plgra"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0uqxd"]
 radius = 26.53
@@ -11,7 +11,7 @@ radius = 26.53
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_jmt53")
+"texture": ExtResource("2_w2kcn")
 }],
 "loop": true,
 "name": &"selected",
@@ -19,7 +19,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_yvs8e")
+"texture": ExtResource("3_plgra")
 }],
 "loop": true,
 "name": &"unselected",
@@ -55,7 +55,7 @@ autostart = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_ido6l")
-animation = &"unselected"
+animation = &"selected"
 autoplay = "unselected"
 
 [connection signal="pressed" from="TouchScreenButton" to="." method="_on_touch_screen_button_pressed"]
