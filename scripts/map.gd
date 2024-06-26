@@ -15,16 +15,29 @@ var fleet_counter: int = 0
 var rng = RandomNumberGenerator.new()
 
 func _ready():
+	detect_screen_size()
+	_generate_sector(1000)
+
+func detect_screen_size():
 	print("screen dims",get_viewport().get_visible_rect().size)
 	screen_dims = get_viewport().get_visible_rect().size
 	x_limit = screen_dims.x
 	y_limit = screen_dims.y
-	#print("running map.gd")
-	#_generate_planet(Vector2(500,500))
-	#_generate_planet(Vector2(100,100))
-	_generate_sector(1000)
 
-func _generate_planet(grid_pos: Vector2) -> void:
+# deprecated
+#func _generate_planet(grid_pos: Vector2) -> void:
+	#var n: int = planet_counter
+	#planets.append(planet.instantiate())
+	#planets[n].id = str(n)
+	##planets[n].team = "grey"
+	#print("spawning planet ", planets[n].id)
+	#planets[n].global_position = grid_pos
+	#planets[n].name = "Planet" + str(n)
+	#flightplans.get_parent().add_child(planets[n])
+	#planets[n].connect("planet_selected", launch_fleet)
+	#planet_counter += 1
+	
+func _generate_planet(grid_pos: Vector2, team: String) -> void:
 	var n: int = planet_counter
 	planets.append(planet.instantiate())
 	planets[n].id = str(n)
@@ -36,6 +49,18 @@ func _generate_planet(grid_pos: Vector2) -> void:
 	planets[n].connect("planet_selected", launch_fleet)
 	planet_counter += 1
 
+func generate_map():
+	var total_planets: int = 20
+	
+	
+#func _generate_red_planet():
+	#pass
+	
+#func _generate_blue_planet():
+	#pass
+	
+#func _generate_grey_planet():
+	#pass
 
 ## _check_overlap() checks if any planet is colliding with another on spawn
 #func _overlaping(grid_pos: Vector2, radius: int) -> bool:
@@ -48,6 +73,7 @@ func _overlaping(grid_pos: Vector2) -> bool:
 					return true
 	return false
 
+#func _return_coordinates_in_quadrant(quadrant: int) -> Vector2:
 func _select_quadrant(quadrant: int) -> Vector2:
 	var screen_width: int = screen_dims.x
 	var screen_height: int = screen_dims.y
@@ -94,33 +120,42 @@ func _select_quadrant(quadrant: int) -> Vector2:
 	solution_coordinates = Vector2(x, y)
 	return solution_coordinates
 
+# Deprecated
+#func _generate_sector(total_planets):
+	#var quadrant: int = 0
+	#var c: int = 0
+	#var max_tries = 100
+	#while c < total_planets:
+		#var try = 0
+		#
+		#var grid_pos = _select_quadrant(quadrant)
+		#while _overlaping(grid_pos) and try < max_tries:
+			#grid_pos = _select_quadrant(quadrant)
+			#try += 1
+		#if !_overlaping(grid_pos):
+			#_generate_planet(grid_pos)
+		## TODO loop over several times to try to find a location but limit max iterations to 10 or something
+		#c += 1
 func _generate_sector(total_planets):
-	#_generate_planet(_select_quadrant(2))
-	#_generate_planet(_select_quadrant(4))
-	#_generate_planet(_select_quadrant(4))
 	var quadrant: int = 0
 	var c: int = 0
 	var max_tries = 100
+	var grid_pos = _select_quadrant(quadrant)
 	while c < total_planets:
 		var try = 0
 		
-		var grid_pos = _select_quadrant(quadrant)
+		grid_pos = _select_quadrant(quadrant)
 		while _overlaping(grid_pos) and try < max_tries:
 			grid_pos = _select_quadrant(quadrant)
 			try += 1
 		if !_overlaping(grid_pos):
-			_generate_planet(grid_pos)
+			_generate_planet(grid_pos, "grey")
 		# TODO loop over several times to try to find a location but limit max iterations to 10 or something
 		c += 1
-	
 
 
 func launch_fleet():
-	# on click send all ships
-	# on long press present prompt of how many ships to send
-	# on second click clear origin
 	_generate_fleet(1)
-	
 
 func _clear_src_dst():
 	Global.source = Global.null_vector
